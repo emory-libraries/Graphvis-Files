@@ -1,0 +1,182 @@
+digraph G {
+   /* NODE DEFINITIONS */
+    compound = true;
+
+   /* Campus Assets */
+   subgraph cluster4 {
+      esd [label="ESD"];
+      shiboleth [label="Shiboleth"];
+      ldap [label="LDAP"];
+      san [label="SAN"];
+   }
+
+  /* Internal Appliccations and Services */
+   subgraph cluster0 {
+      apache [label="Apache"];
+      mod_wsgi [label="mod_wsgi"];
+      mod_php [label="mod_php"];
+      solr [label="Solr"];
+      mongrel [label="Mongrel"];
+      tomcat [label="Tomcat/Jetty"];
+      fedora [label="Fedora"];
+
+      mod_wsgi -> apache;
+      mod_php -> apache;
+      solr -> tomcat;
+      fedora -> tomcat;
+      fedora -> san;
+      solr -> fedora;
+   }
+
+   /* Ex Libris Hosted Apps */
+   subgraph cluster7 {
+      primo [label="Primo"];
+      sfx [label="SFX"];
+      metalib [label="Metalib"];
+      aleph [label="Aleph"];    
+   }
+
+   /* Databases */
+   subgraph cluster1 {
+      mysql [label="MySQL"];
+      postgres [label="postgreSQL"];
+      exist [label="eXistDB"]
+
+      exist -> tomcat;
+   }
+
+   /* Libraries */
+   subgraph cluster2 {
+      eulfedora [label="EULFedora"];
+      eulxml [label="EULxml"];
+      eulexistdb [label="EULeXistDB"];
+      django [label="Django"];
+      rails [label="Rails"];
+      zend [label="Zend"];
+
+      django -> mod_wsgi;
+      eulfedora -> mod_wsgi;
+      eulfedora -> fedora;
+      eulxml -> mod_wsgi;
+      eulexistdb -> mod_wsgi;
+      eulexistdb -> exist;
+      rails -> mongrel;
+      zend -> mod_php;
+   }
+
+   /* CMS */
+
+   subgraph cluster3 {
+      wordpress [label="Wordpress"];
+      drupal [label="Drupal"];
+      omeka [label="Omeka"];
+
+      wordpress -> mysql [lhead=cluster1];
+      wordpress -> mod_php;
+      drupal -> mysql [lhead=cluster1];
+      drupal -> mod_php;
+      omeka -> mysql [lhead=cluster1];
+      omeka -> mod_php;
+   }
+
+   /* Internal Applications */
+   subgraph cluster5 {
+      pidman [label="PID Manager"];
+      ezproxy [label="EZProxy"];
+
+      pidman -> django;
+   }
+
+
+  /* End User Applications */
+   subgraph cluster6 {
+      openemory [label="Open Emory"];
+      etd [label="EDT"];
+      ereserves [label="Reserves Direct"];
+      africanorigins [label="African Origins"];
+      voyages [label="Voyages"];
+      digwf [label="Digitization Workflow"];
+      digitalmasters [label="Digital Masters"];
+      thekeep [label="The Keep"];
+      postcolonial [label="Postcolonial Studies"];
+      dwrangler [label="dWrangler"];
+      edc [label="Electronic Datacenter"];
+      ghc [label="Global Health Chronicles"];
+      greatwar [label="Great War"];
+      findingaids [label="Finding Aids"];
+      readux [label="Readux"];
+      rushdie [label="Rushdie"];
+      southernspaces [label="Southern Spaces"];
+      staffweb [label="StaffWeb"];
+
+      openemory  ->  django;
+      openemory -> eulfedora;
+      openemory -> eulxml;
+      openemory -> ldap;
+      openemory -> esd;
+
+      etd -> fedora;
+      etd -> ldap;
+      etd -> esd;
+      etd -> mysql [lhead=cluster1];
+      etd -> zend;
+
+      ereserves -> mod_php;
+      ereserves -> esd;
+      eresearves -> ldap;
+      ereserves -> mysql [lhead=cluster1];
+
+      africanorigins -> zend;
+      africanorigins -> mysql [lhead=cluster1];
+
+      voyages -> tomcat;
+      voyages -> mysql;
+      
+      digwf -> rails;
+      digwf -> postgres [lhead=cluster0];
+      digwf -> fedora;
+      digwf -> aleph;
+
+      digitalmasters -> rails;
+      digitalmasters -> postgres;
+
+      thekeep -> eulfedora -> fedora;
+      thekeep -> eulxml;
+      thekeep -> ldap;
+      thekeep -> solr;
+
+      postcolonial -> wordpress;
+
+      dwrangler -> mod_wsgi;
+      dwrangler -> mysql [lhead=cluster1];
+      dwrangler -> django;
+      dwrangler -> ldap;
+
+      edc -> django;
+      edc -> eulxml;
+      edc -> postgres;
+      edc -> drupal;
+
+      ghc -> zend;
+      ghc -> fedora;
+
+      greatwar -> eulxml;
+      greatwar -> eulfedora;
+      greatwar -> django;
+      greatwar -> fedora;
+      greatwar -> mysql [lhead=cluster1];
+      
+      findingaids -> eulexistdb;
+      findingaids -> exist;
+      findingaids -> mysql [lhead=cluster1];
+      findingaids -> ldap;
+
+      readux -> eulfedora;
+      readux -> fedora;
+      readux -> eulxml;
+      readux -> ldap;
+      readux -> mysql [lhead=cluster1];
+   }
+
+
+}
